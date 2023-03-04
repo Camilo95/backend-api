@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  backend-api:
+    container_name: 'backend-api'
+    image: 'backend-api'
+    shm_size: '1gb'
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        WOMPI_PRIVATE_KEY: $WOMPI_PRIVATE_KEY_TEST
+        WOMPI_PUBLIC_KEY: $WOMPI_PUBLIC_KEY_TEST
+    ports:
+      - 3000:3000

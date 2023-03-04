@@ -1,0 +1,19 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@wompi/wompi/(.*)": "<rootDir>/../libs/wompi/src/$1",
+    "@wompi/wompi": "<rootDir>/../libs/wompi/src",
+    "@Database/database/(.*)": "<rootDir>/../libs/database/src/$1",
+    "@Database/database": "<rootDir>/../libs/database/src"
+  }
+}
