@@ -5,6 +5,8 @@ services:
     container_name: 'backend-api'
     image: 'backend-api'
     shm_size: '1gb'
+    depends_on:
+      - postgres_db
     build: 
       context: ./
       dockerfile: Dockerfile
@@ -13,3 +15,12 @@ services:
         WOMPI_PUBLIC_KEY: $WOMPI_PUBLIC_KEY_TEST
     ports:
       - 3000:3000
+  postgres_db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: root # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: platform # The PostgreSQL default database (automatically created at first launch)
