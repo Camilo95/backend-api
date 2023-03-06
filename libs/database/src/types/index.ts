@@ -1,1 +1,2 @@
-export * from './database.d';
+export * from './database';
+export * from './global';

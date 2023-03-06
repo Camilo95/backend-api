@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.model';
 
-/* It's a class that represents a method payment */
+// Models
+import { Passenger } from './passenger.model';
+
 @Entity()
 export class MethodPayment {
   @PrimaryGeneratedColumn('uuid')
@@ -13,7 +14,7 @@ export class MethodPayment {
   @Column()
   last_four: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   expires_token: Date | string;
 
   @Column()
@@ -22,9 +23,9 @@ export class MethodPayment {
   @Column()
   type: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   created_at: Date | string;
 
-  @ManyToOne(() => User, (user) => user.methodPayment)
-  user: User;
+  @ManyToOne(() => Passenger, (passenger) => passenger.methodPayment)
+  passenger: Passenger;
 }
