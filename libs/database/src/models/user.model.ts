@@ -1,10 +1,6 @@
 import { createHash } from 'crypto';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { MethodPayment } from './methodPayment.model';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-type TTypeUser = 'CONDUCTOR' | 'PASAJERO';
-
-/* It's a class that represents a user */
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -21,15 +17,6 @@ export class User {
 
   @Column()
   email: string;
-
-  @Column({
-    type: 'varchar',
-    length: 10,
-  })
-  type: TTypeUser;
-
-  @OneToMany(() => MethodPayment, (methodPayment) => methodPayment.user)
-  methodPayment: MethodPayment[];
 
   set hashPassword(data: string) {
     const hash = createHash('sha256').update(data).digest('hex');
