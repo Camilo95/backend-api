@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from './database.service';
 import { DatabaseModule } from './database.module';
-import { database, models } from './configs/appDataSource';
+import { database, models } from './configs/dataSource';
 
 import { User } from './models';
 
@@ -27,7 +27,6 @@ describe('DatabaseService', () => {
     user.lastName = 'Cabrera';
     user.hashPassword = '12345';
     user.email = 'camilo@gmail.com';
-    user.type = 'CONDUCTOR';
 
     expect(user.getFullName()).toEqual('Camilo Cabrera');
     expect(user.hashPassword).toEqual(

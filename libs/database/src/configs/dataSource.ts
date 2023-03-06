@@ -3,9 +3,23 @@ import { DataSourceOptions } from 'typeorm';
 import config from './config';
 
 //Models
-import { User, MethodPayment } from '../models';
+import {
+  User,
+  MethodPayment,
+  TravelRequest,
+  Driver,
+  Passenger,
+  TravelPayment,
+} from '../models';
 
-export const models = [User, MethodPayment];
+export const models = [
+  User,
+  MethodPayment,
+  TravelRequest,
+  Driver,
+  Passenger,
+  TravelPayment,
+];
 
 const options: DataSourceOptions = {
   type: config.DB_DIALECT,
