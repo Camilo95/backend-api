@@ -26,6 +26,6 @@ export class MethodPayment {
   @Column({ type: 'timestamp' })
   created_at: Date | string;
 
-  @ManyToOne(() => User, (user) => user.travelPayment)
+  @ManyToOne(() => User, (user) => user.methodPayment)
   user: User;
 }
