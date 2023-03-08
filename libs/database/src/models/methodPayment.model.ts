@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 // Models
-import { Rider } from './rider.model';
+import { User } from './user.model';
 
 @Entity()
 export class MethodPayment {
@@ -26,6 +26,6 @@ export class MethodPayment {
   @Column({ type: 'timestamp' })
   created_at: Date | string;
 
-  @ManyToOne(() => Rider, (rider) => rider.methodPayment)
-  passenger: Rider;
+  @ManyToOne(() => User, (user) => user.travelPayment)
+  user: User;
 }

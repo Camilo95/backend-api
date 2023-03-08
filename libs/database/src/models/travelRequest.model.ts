@@ -11,9 +11,8 @@ import {
 import { TStatusService } from '../types';
 
 // Models
-import { Driver } from './driver.model';
-import { Rider } from './rider.model';
 import { TravelPayment } from './travelPayment.model';
+import { User } from './user.model';
 
 @Entity()
 export class TravelRequest {
@@ -53,11 +52,13 @@ export class TravelRequest {
   @Column({ type: 'timestamp', default: new Date() })
   created_at: Date | string;
 
-  @ManyToOne(() => Driver, (driver) => driver.travelRequest)
-  driver: Driver;
+  @ManyToOne(() => User, (user) => user.userRider)
+  @JoinColumn()
+  userRider: User;
 
-  @ManyToOne(() => Rider, (rider) => rider.travelRequest)
-  passenger: Rider;
+  @ManyToOne(() => User, (user) => user.userDriver)
+  @JoinColumn()
+  userDriver: User;
 
   @OneToOne(() => TravelPayment)
   @JoinColumn()
