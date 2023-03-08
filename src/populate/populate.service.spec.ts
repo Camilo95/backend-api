@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PopulateService } from './populate.service';
-import { DatabaseModule, DatabaseService } from '@Database/database';
+import { DatabaseModule } from '@Database/database';
 import { PopulateModule } from './populate.module';
 
 describe('PopulateService', () => {

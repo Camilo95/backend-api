@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-import { users } from './variables'
+import { users } from './variables';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
