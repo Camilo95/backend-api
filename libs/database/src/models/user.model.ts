@@ -21,7 +21,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 6 })
   type: TTypeUser;
 
   @OneToMany(() => TravelRequest, (travelRequest) => travelRequest.userRider)
