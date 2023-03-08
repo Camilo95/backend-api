@@ -7,12 +7,12 @@ export class TravelController {
   constructor(private readonly travelService: TravelService) {}
 
   @Post('start')
-  handlerCreateServiceTravel(@Body() travel: TravelDto) {
-    return this.travelService.createServiceTravel(travel);
+  async handlerCreateServiceTravel(@Body() travel: TravelDto) {
+    return await this.travelService.createServiceTravel(travel);
   }
 
   @Post('finish')
-  handlerFinishServiceTravel(@Body() travel: TravelDto) {
-    return this.travelService.finishServiceTravel(travel);
+  async handlerFinishServiceTravel(@Body() travel: TravelDto) {
+    return await this.travelService.finishServiceTravel(travel);
   }
 }

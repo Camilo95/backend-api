@@ -1,6 +1,6 @@
 import { DatabaseService } from '@Database/database';
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const moment = require('moment');
 
@@ -68,12 +68,12 @@ export class TravelService {
     };
   }
 
-  private calcualteLongLat() {
+  /* private calcualteLongLat() {
     return {
       longitude: Math.floor(Math.random() * 100000).toString(),
       latitude: Math.floor(Math.random() * 100000).toString(),
     };
-  }
+  }*/
 
   private calculateLongitud(puntoA1, puntoA2, puntoB1, puntoB2) {
     const km = 10000;

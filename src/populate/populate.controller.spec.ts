@@ -22,7 +22,7 @@ describe('PopulateController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should be defined', async () => {
+  it('run import users', async () => {
     await controller.handlerPopulateUsers(users as UserDto);
     expect(controller).toBeDefined();
   });
