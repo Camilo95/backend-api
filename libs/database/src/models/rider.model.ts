@@ -16,7 +16,7 @@ import { TravelRequest } from './travelRequest.model';
 import { User } from './user.model';
 
 @Entity()
-export class Passenger {
+export class Rider {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
