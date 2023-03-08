@@ -1,5 +1,8 @@
-import { createHash } from 'crypto';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+// Models
+import { TravelRequest } from './travelRequest.model';
+import { MethodPayment } from './methodPayment.model';
 
 @Entity()
 export class User {
@@ -13,19 +16,16 @@ export class User {
   lastName: string;
 
   @Column()
-  private password: string;
-
-  @Column()
   email: string;
 
-  set hashPassword(data: string) {
-    const hash = createHash('sha256').update(data).digest('hex');
-    this.password = hash;
-  }
+  @OneToMany(() => TravelRequest, (travelRequest) => travelRequest.userRider)
+  userRider: TravelRequest[];
 
-  get hashPassword() {
-    return this.password;
-  }
+  @OneToMany(() => TravelRequest, (travelRequest) => travelRequest.userDriver)
+  userDriver: TravelRequest[];
+
+  @OneToMany(() => MethodPayment, (methodPayment) => methodPayment.user)
+  travelPayment: MethodPayment;
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
