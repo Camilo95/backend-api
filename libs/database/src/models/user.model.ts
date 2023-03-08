@@ -4,6 +4,9 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TravelRequest } from './travelRequest.model';
 import { MethodPayment } from './methodPayment.model';
 
+// Types
+import { TTypeUser } from '../types';
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -18,6 +21,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  type: TTypeUser;
+
   @OneToMany(() => TravelRequest, (travelRequest) => travelRequest.userRider)
   userRider: TravelRequest[];
 
@@ -25,7 +31,7 @@ export class User {
   userDriver: TravelRequest[];
 
   @OneToMany(() => MethodPayment, (methodPayment) => methodPayment.user)
-  travelPayment: MethodPayment;
+  methodPayment: MethodPayment;
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
