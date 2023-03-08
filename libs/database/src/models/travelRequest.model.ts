@@ -12,7 +12,7 @@ import { TStatusService } from '../types';
 
 // Models
 import { Driver } from './driver.model';
-import { Passenger } from './passenger.model';
+import { Rider } from './rider.model';
 import { TravelPayment } from './travelPayment.model';
 
 @Entity()
@@ -56,8 +56,8 @@ export class TravelRequest {
   @ManyToOne(() => Driver, (driver) => driver.travelRequest)
   driver: Driver;
 
-  @ManyToOne(() => Passenger, (passenger) => passenger.travelRequest)
-  passenger: Passenger;
+  @ManyToOne(() => Rider, (rider) => rider.travelRequest)
+  passenger: Rider;
 
   @OneToOne(() => TravelPayment)
   @JoinColumn()
