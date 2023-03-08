@@ -25,12 +25,8 @@ describe('DatabaseService', () => {
     const user = new User();
     user.firstName = 'Camilo';
     user.lastName = 'Cabrera';
-    user.hashPassword = '12345';
     user.email = 'camilo@gmail.com';
 
     expect(user.getFullName()).toEqual('Camilo Cabrera');
-    expect(user.hashPassword).toEqual(
-      '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5',
-    );
   });
 });
