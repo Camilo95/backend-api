@@ -1,28 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { TTransaction } from './dtos/wompi.dto';
-import config from './config';
+import to from 'await-to-js';
+
+// Types
+import { TPresignedAcceptance, TTransaction } from './types';
+
+// Classes
+import { Wompi } from './classes/wompi';
 
 @Injectable()
 export class WompiService {
-  private transacction: TTransaction;
+  constructor(private readonly wompi: Wompi) {}
 
-  private async generateSignatureSHA256() {
-    let concatString = `${this.transacction.reference}`;
-    concatString = `${concatString}${this.transacction.amount_in_cents}`;
-    concatString = `${concatString}${this.transacction.currency}`;
-    concatString = `${concatString}${config.INTEGRITY_SECRET}`;
-
-    const encondedText = new TextEncoder().encode(concatString);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encondedText);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-    console.log(hashHex);
-    return hashHex;
+  public async sendTransaction(newTransaction: TTransaction) {
+    const [error, responseTransaction] = await to(
+      this.wompi.createTransaction(newTransaction),
+    );
+    if (error) {
+      throw new Error('Error');
+    }
+    return responseTransaction;
   }
 
-  private convertAmountToCents(amount: number) {
+  public async getAcceptanceToken(): Promise<TPresignedAcceptance> {
+    const merchant = await this.wompi.getMerchant();
+    return merchant.data.presigned_acceptance;
+  }
+
+  public convertAmountToCents(amount: number | string): number {
     if (typeof amount === 'string') {
       amount = parseInt(amount, 10);
     }
