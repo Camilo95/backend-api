@@ -20,4 +20,19 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('get users', async () => {
+    await controller.handlerGetUsers();
+    expect(controller).toBeDefined();
+  });
+
+  it('get drivers', async () => {
+    await controller.handlerGetUserDrivers();
+    expect(controller).toBeDefined();
+  });
+
+  it('get riders', async () => {
+    await controller.handlerGetUserRiders();
+    expect(controller).toBeDefined();
+  });
 });
