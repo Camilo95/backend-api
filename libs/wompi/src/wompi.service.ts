@@ -21,9 +21,14 @@ export class WompiService {
     return responseTransaction;
   }
 
-  public async getAcceptanceToken(): Promise<TPresignedAcceptance> {
+  public async getAcceptanceToken() {
     const merchant = await this.wompi.getMerchant();
     return merchant.data.presigned_acceptance;
+  }
+
+  public async getTransaction(idTransaction: string) {
+    const transaction = await this.wompi.getTransaction(idTransaction);
+    return transaction;
   }
 
   public convertAmountToCents(amount: number | string): number {
