@@ -28,20 +28,20 @@ export class TravelRequest {
   @Column()
   starting_longitude: string;
 
-  @Column()
-  ending_latitude: string;
+  @Column({ nullable: true })
+  ending_latitude?: string;
 
-  @Column()
-  ending_longitude: string;
+  @Column({ nullable: true })
+  ending_longitude?: string;
 
-  @Column()
-  amount: number;
+  @Column({ nullable: true })
+  amount?: number;
 
   @Column({ type: 'timestamp' })
   starting_travel?: Date | string;
 
-  @Column({ type: 'timestamp' })
-  ending_travel?: string;
+  @Column({ type: 'timestamp', nullable: true })
+  ending_travel?: Date | string;
 
   @Column({
     type: 'varchar',

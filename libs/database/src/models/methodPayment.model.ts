@@ -18,9 +18,6 @@ export class MethodPayment {
   expires_token: Date | string;
 
   @Column()
-  status: string;
-
-  @Column()
   type: string;
 
   @Column({ type: 'timestamp' })
