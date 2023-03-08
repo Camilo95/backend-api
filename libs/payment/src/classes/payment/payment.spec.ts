@@ -1,9 +1,9 @@
 import { Request } from '../request';
-import { Wompi } from './wompi';
+import { Payment } from './payment';
 
 describe('Wompi', () => {
   it('should be defined', () => {
     const request = new Request();
-    expect(new Wompi(request)).toBeDefined();
+    expect(new Payment(request)).toBeDefined();
   });
 });

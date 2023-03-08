@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IUtilService } from '@wompi/wompi/interfaces';
+import { IUtilService } from 'libs/payment/src/interfaces';
 import to from 'await-to-js';
 
 @Injectable()

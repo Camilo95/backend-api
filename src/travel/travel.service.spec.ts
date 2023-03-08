@@ -5,14 +5,14 @@ import { TravelService } from './travel.service';
 import { TravelModule } from './travel.module';
 import { UserModule } from '../user/user.module';
 import { DatabaseModule } from '@Database/database';
-import { WompiModule } from '@wompi/wompi';
+import { PaymentModule } from 'libs/payment/src';
 
 describe('TravelService', () => {
   let service: TravelService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TravelModule, UserModule, DatabaseModule, WompiModule],
+      imports: [TravelModule, UserModule, DatabaseModule, PaymentModule],
       providers: [TravelService],
     }).compile();
 

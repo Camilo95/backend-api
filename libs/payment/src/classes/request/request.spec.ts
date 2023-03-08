@@ -1,15 +1,12 @@
 import { Request } from './request';
 import nock from 'nock';
 
-const api = nock('https://example.com');
-/*
-, {
+const api = nock('https://example.com', {
   reqheaders: {
     'Content-Type': 'application/json',
     authorization: 'Basic Auth',
   },
-}
-*/
+});
 
 describe('Request', () => {
   beforeEach(() => {

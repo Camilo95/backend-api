@@ -1,7 +1,7 @@
 import { DatabaseService } from '@Database/database';
 import { User } from '@Database/database/models';
 import { Injectable } from '@nestjs/common';
-import { PAYMENTS_METHOD } from '@wompi/wompi/types';
+import { PAYMENTS_METHOD } from 'libs/payment/src/types';
 
 @Injectable()
 export class PopulateService {

@@ -74,6 +74,11 @@ export type TTransaction = {
   shipping_address?: TShippingAddress;
 };
 
+export type TErrorResponse = {
+  type: string;
+  messages: { reference: string[] };
+};
+
 // Response merchant
 type TPaymentProcesor = {
   name: string;
@@ -112,6 +117,7 @@ export type TMerchant = {
 
 export type TResponseMerchant = {
   data: TMerchant;
+  error: TErrorResponse;
   meta: object;
 };
 
@@ -154,6 +160,7 @@ export type TResultTransaction = {
 
 export type TResponseTransaction = {
   data: TResultTransaction;
+  error: TErrorResponse;
   meta: object;
 };
 
@@ -185,6 +192,7 @@ export type TGetTransaction = {
 };
 
 export type TResponseGetTransaction = {
-  data: string;
+  data: TGetTransaction;
+  error: TErrorResponse;
   meta: string;
 };

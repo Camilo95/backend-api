@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import to from 'await-to-js';
 
-// Types
-import { TPresignedAcceptance, TTransaction } from './types';
-
 // Classes
-import { Wompi } from './classes/wompi';
+import { Payment } from './classes/payment';
+
+// Types
+import { TTransaction } from './types';
 
 @Injectable()
-export class WompiService {
-  constructor(private readonly wompi: Wompi) {}
+export class PaymentService {
+  constructor(private readonly wompi: Payment) {}
 
   public async sendTransaction(newTransaction: TTransaction) {
     const [error, responseTransaction] = await to(

@@ -13,7 +13,7 @@ import {
 import { Request } from '../request';
 
 @Injectable()
-export class Wompi {
+export class Payment {
   private transacction: TTransaction;
 
   constructor(private readonly request: Request) {}
@@ -22,7 +22,7 @@ export class Wompi {
     let concatString = `${this.transacction.reference}`;
     concatString = `${concatString}${this.transacction.amount_in_cents}`;
     concatString = `${concatString}${this.transacction.currency}`;
-    concatString = `${concatString}${config.WOMPI_INTEGRITY_SECRET}`;
+    concatString = `${concatString}${config.PAYMENT_INTEGRITY_SECRET}`;
 
     const encondedText = new TextEncoder().encode(concatString);
     const hashBuffer = await crypto.subtle.digest('SHA-256', encondedText);
@@ -36,13 +36,13 @@ export class Wompi {
 
   private getBaseUrl() {
     return config.MODE_DEV
-      ? config.WOMPI_URL_SANDBOX
-      : config.WOMPI_URL_PRODUCTION;
+      ? config.PAYMENT_URL_SANDBOX
+      : config.PAYMENT_URL_PRODUCTION;
   }
 
   async getMerchant() {
     const baseUrl = this.getBaseUrl();
-    const path = `/merchants/${config.WOMPI_PUBLIC_KEY}`;
+    const path = `/merchants/${config.PAYMENT_PUBLIC_KEY}`;
 
     // configure base url and headers for the request
     const url = `${baseUrl}${path}`;
@@ -73,7 +73,7 @@ export class Wompi {
     const url = `${baseUrl}${path}`;
     const options: RequestInit = {
       headers: {
-        Authorization: `Bearer ${config.WOMPI_PRIVATE_KEY}`,
+        Authorization: `Bearer ${config.PAYMENT_PRIVATE_KEY}`,
         'Content-Type': 'application/json',
         accept: '*/*',
       },
@@ -102,7 +102,7 @@ export class Wompi {
       headers: {
         accept: 'application/json',
       },
-      method: 'POST',
+      method: 'GET',
     };
 
     const [error, response] = await to(
