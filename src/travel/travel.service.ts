@@ -1,11 +1,23 @@
 import { DatabaseService } from '@Database/database';
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
+import util from 'util';
+
+const sleep = util.promisify(setTimeout);
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const moment = require('moment');
 
 // Dtos
 import { TravelDto } from './dtos/travel.dto';
+
+// Modules
+import { WompiService } from '@wompi/wompi';
+import {
+  CURRENCY,
+  PAYMENTS_METHOD,
+  TRANSACTIONS_STATUS,
+  TTransaction,
+} from '@wompi/wompi/types';
 
 @Injectable()
 export class TravelService {
@@ -16,6 +28,7 @@ export class TravelService {
   constructor(
     private readonly userService: UserService,
     private readonly databaseService: DatabaseService,
+    private readonly wompiService: WompiService,
   ) {}
 
   async createServiceTravel(travel: TravelDto) {
@@ -104,6 +117,39 @@ export class TravelService {
     travel.amount = this.calculateCost(time.minutes, km);
 
     await this.databaseService.travelRequestRepository.save(travel);
+
+    const token = await this.wompiService.getAcceptanceToken();
+    const newTransaction: TTransaction = {
+      currency: CURRENCY.COP,
+      customer_email: travel.userRider.email,
+      payment_method: {
+        type: PAYMENTS_METHOD.CARD,
+        token: travel.userRider.methodPayment.token,
+        installments: 1,
+      },
+      reference: travel.reference.toString(),
+      amount_in_cents: this.wompiService.convertAmountToCents(3000),
+      acceptance_token: token.acceptance_token,
+    };
+
+    const transaction = await this.wompiService.sendTransaction(newTransaction);
+
+    await sleep(2000);
+
+    const idTransaction = transaction.data.id;
+    const responsetransaction = await this.wompiService.getTransaction(
+      idTransaction,
+    );
+
+    if (responsetransaction.data.status === TRANSACTIONS_STATUS.APPROVED) {
+      const travelPayment = this.databaseService.travelPayment;
+      travelPayment.status_transaction = TRANSACTIONS_STATUS.APPROVED;
+      travelPayment.amount_payed = transaction.data.amount_in_cents;
+
+      const newTravelPayment =
+        this.databaseService.travelPaymentRepository.create(travelPayment);
+      this.databaseService.travelPaymentRepository.save(newTravelPayment);
+    }
   }
 
   calculateCost(minutes: number, kilometros: number) {

@@ -6,21 +6,6 @@ import to from 'await-to-js';
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async getUser(email: string) {
-    const [error, response] = await to(
-      this.databaseService.userRepository.findOne({
-        where: {
-          email,
-        },
-      }),
-    );
-    if (error) {
-      throw new Error('Error al realizar la consulta');
-    }
-
-    return response;
-  }
-
   async getUsers() {
     const [error, response] = await to(
       this.databaseService.userRepository.find(),
