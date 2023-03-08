@@ -8,7 +8,7 @@ import {
   MethodPayment,
   TravelRequest,
   Driver,
-  Passenger,
+  Rider,
   TravelPayment,
 } from '../models';
 
@@ -17,7 +17,7 @@ export const models = [
   MethodPayment,
   TravelRequest,
   Driver,
-  Passenger,
+  Rider,
   TravelPayment,
 ];
 
