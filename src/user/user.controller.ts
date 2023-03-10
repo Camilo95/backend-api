@@ -5,11 +5,6 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('all')
-  async handlerGetUsers() {
-    return this.userService.getUsers();
-  }
-
   @Get('drivers')
   handlerGetUserDrivers() {
     return this.userService.getUsersDriver();

@@ -1,7 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { TravelService } from './travel.service';
 import { TravelDto } from './dtos/travel.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('travel')
 export class TravelController {
   constructor(private readonly travelService: TravelService) {}

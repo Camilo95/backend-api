@@ -8,14 +8,14 @@ import { DatabaseModule } from '@Database/database';
 
 // Dtos
 import { TravelDto } from './dtos/travel.dto';
-import { WompiModule } from '@wompi/wompi';
+import { PaymentModule } from '@Payment/payment';
 
 describe('TravelController', () => {
   let controller: TravelController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UserModule, DatabaseModule, WompiModule],
+      imports: [UserModule, DatabaseModule, PaymentModule],
       controllers: [TravelController],
       providers: [TravelService],
     }).compile();

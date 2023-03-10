@@ -14,6 +14,8 @@
     "@wompi/wompi/(.*)": "<rootDir>/../libs/wompi/src/$1",
     "@wompi/wompi": "<rootDir>/../libs/wompi/src",
     "@Database/database/(.*)": "<rootDir>/../libs/database/src/$1",
-    "@Database/database": "<rootDir>/../libs/database/src"
+    "@Database/database": "<rootDir>/../libs/database/src",
+    "@Payment/payment/(.*)": "<rootDir>/../libs/payment/src/$1",
+    "@Payment/payment": "<rootDir>/../libs/payment/src"
   }
 }

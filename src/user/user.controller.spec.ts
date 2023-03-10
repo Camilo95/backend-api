@@ -21,11 +21,6 @@ describe('UserController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('get users', async () => {
-    await controller.handlerGetUsers();
-    expect(controller).toBeDefined();
-  });
-
   it('get drivers', async () => {
     await controller.handlerGetUserDrivers();
     expect(controller).toBeDefined();

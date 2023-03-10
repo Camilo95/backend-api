@@ -1,23 +1,21 @@
 import { DatabaseService } from '@Database/database';
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import util from 'util';
-
-const sleep = util.promisify(setTimeout);
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const moment = require('moment');
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Dtos
 import { TravelDto } from './dtos/travel.dto';
 
 // Modules
-import { WompiService } from '@wompi/wompi';
+import { PaymentService } from '@Payment/payment';
 import {
   CURRENCY,
   PAYMENTS_METHOD,
-  TRANSACTIONS_STATUS,
   TTransaction,
-} from '@wompi/wompi/types';
+} from '@Payment/payment/types';
 
 @Injectable()
 export class TravelService {
@@ -28,7 +26,7 @@ export class TravelService {
   constructor(
     private readonly userService: UserService,
     private readonly databaseService: DatabaseService,
-    private readonly wompiService: WompiService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async createServiceTravel(travel: TravelDto) {
@@ -40,13 +38,10 @@ export class TravelService {
     const newTravel = this.databaseService.travelRequest;
     newTravel.starting_latitude = travel.latitude;
     newTravel.starting_longitude = travel.longitude;
-    // newTravel.ending_latitude = travel.latitude;
-    // newTravel.ending_longitude = travel.longitude;
     newTravel.reference = this.generateReference();
     newTravel.status = 'EN CURSO';
     newTravel.created_at = new Date();
     newTravel.starting_travel = new Date();
-    // newTravel.ending_travel = new Date();
     newTravel.userDriver = driver;
     newTravel.userRider = rider;
 
@@ -57,45 +52,6 @@ export class TravelService {
     );
 
     return { id: travelSaved.id };
-  }
-
-  generateReference() {
-    return Math.floor(Math.random() * 100000);
-  }
-
-  async getTravelsOnProgress(id: string) {
-    return await this.databaseService.travelRequestRepository.findOne({
-      where: {
-        id: id,
-        status: 'EN CURSO',
-      },
-    });
-  }
-
-  private calculateTime() {
-    const minutes = Math.floor(Math.random() * 10);
-
-    return {
-      date: moment(new Date(), 'hh:mm:ss A').add(minutes, 'minutes').format(),
-      minutes,
-    };
-  }
-
-  /* private calcualteLongLat() {
-    return {
-      longitude: Math.floor(Math.random() * 100000).toString(),
-      latitude: Math.floor(Math.random() * 100000).toString(),
-    };
-  }*/
-
-  private calculateLongitud(puntoA1, puntoA2, puntoB1, puntoB2) {
-    const km = 10000;
-    const longitude = Math.sqrt(
-      Math.pow(puntoA2 - puntoA1, 2) + Math.pow(puntoB2 - puntoB1, 2),
-    );
-    const newLongitude = longitude / km;
-
-    return parseInt(newLongitude.toString(), 10);
   }
 
   async finishServiceTravel(finishTravel: TravelDto) {
@@ -116,40 +72,94 @@ export class TravelService {
 
     travel.amount = this.calculateCost(time.minutes, km);
 
-    await this.databaseService.travelRequestRepository.save(travel);
+    // Create transaction
+    const token = await this.paymentService.getAcceptanceToken();
 
-    const token = await this.wompiService.getAcceptanceToken();
     const newTransaction: TTransaction = {
       currency: CURRENCY.COP,
       customer_email: travel.userRider.email,
       payment_method: {
         type: PAYMENTS_METHOD.CARD,
-        token: travel.userRider.methodPayment.token,
+        token: travel.userRider.methodPayment[0].token,
         installments: 1,
       },
       reference: travel.reference.toString(),
-      amount_in_cents: this.wompiService.convertAmountToCents(3000),
+      amount_in_cents: this.paymentService.convertAmountToCents(travel.amount),
       acceptance_token: token.acceptance_token,
     };
+    const transaction = await this.paymentService.sendTransaction(
+      newTransaction,
+    );
+    if (transaction.error) {
+      throw new Error(
+        `Ocurro un error al crear la transaccion: ${transaction.error.messages.reference[0]}`,
+      );
+    }
 
-    const transaction = await this.wompiService.sendTransaction(newTransaction);
+    await sleep(10000);
 
-    await sleep(2000);
-
+    // Get transaction
     const idTransaction = transaction.data.id;
-    const responsetransaction = await this.wompiService.getTransaction(
+    const responsetransaction = await this.paymentService.getTransaction(
       idTransaction,
     );
 
-    if (responsetransaction.data.status === TRANSACTIONS_STATUS.APPROVED) {
-      const travelPayment = this.databaseService.travelPayment;
-      travelPayment.status_transaction = TRANSACTIONS_STATUS.APPROVED;
-      travelPayment.amount_payed = transaction.data.amount_in_cents;
+    // Create payment
+    let travelPayment = this.databaseService.travelPayment;
+    travelPayment.status_transaction = responsetransaction.data.status;
+    travelPayment.amount_payed = transaction.data.amount_in_cents;
 
-      const newTravelPayment =
-        this.databaseService.travelPaymentRepository.create(travelPayment);
-      this.databaseService.travelPaymentRepository.save(newTravelPayment);
-    }
+    const newTravelPayment =
+      this.databaseService.travelPaymentRepository.create(travelPayment);
+    travelPayment = await this.databaseService.travelPaymentRepository.save(
+      newTravelPayment,
+    );
+
+    // Update travel
+    travel.travelPayment = travelPayment;
+    await this.databaseService.travelRequestRepository.save(travel);
+
+    return {
+      message: `the service is completed, total paid: ${travel.amount} COP`,
+    };
+  }
+
+  generateReference() {
+    const part1 = Math.floor(Math.random() * 100000);
+    const part2 = Math.floor(Math.random() * 100000);
+    const reference = `${part1}-${part2}`;
+    return reference;
+  }
+
+  async getTravelsOnProgress(id: string) {
+    return await this.databaseService.travelRequestRepository.findOne({
+      relations: {
+        userRider: { methodPayment: true },
+      },
+      where: {
+        id: id,
+        status: 'EN CURSO',
+      },
+    });
+  }
+
+  private calculateTime() {
+    const minutes = Math.floor(Math.random() * 10);
+
+    return {
+      date: moment(new Date(), 'hh:mm:ss A').add(minutes, 'minutes').format(),
+      minutes,
+    };
+  }
+
+  private calculateLongitud(puntoA1, puntoA2, puntoB1, puntoB2) {
+    const km = 1000;
+    const longitude = Math.sqrt(
+      Math.pow(puntoA2 - puntoA1, 2) + Math.pow(puntoB2 - puntoB1, 2),
+    );
+    const newLongitude = longitude / km;
+
+    return parseInt(newLongitude.toString(), 10);
   }
 
   calculateCost(minutes: number, kilometros: number) {
