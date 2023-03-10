@@ -1,10 +1,19 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 // Types
-import { TStatusService } from '../types';
+import { TRANSACTIONS_STATUS } from '@Payment/payment/types';
 
 @Entity()
 export class TravelPayment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  amount_payed: number;
+
+  @Column({ type: 'varchar', length: 10 })
+  status_transaction: TRANSACTIONS_STATUS;
+
+  @Column({ type: 'timestamp', default: new Date() })
+  created_at: Date | string;
 }

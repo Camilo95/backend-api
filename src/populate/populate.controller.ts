@@ -9,7 +9,7 @@ export class PopulateController {
   constructor(private readonly populateService: PopulateService) {}
 
   @Post('/users')
-  async handlerPopulateUsers(@Body() users: UserDto) {
-    return await this.populateService.populateUsers(users.data);
+  async handlerPopulateUsers(@Body() users: UserDto[]) {
+    return await this.populateService.populateUsers(users);
   }
 }
