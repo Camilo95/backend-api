@@ -1,13 +1,15 @@
 import { DatabaseService } from '@Database/database';
-import { User } from '@Database/database/models';
 import { Injectable } from '@nestjs/common';
-import { PAYMENTS_METHOD } from 'libs/payment/src/types';
+
+// Types
+import { PAYMENTS_METHOD } from '@Payment/payment/types';
+import { UserDto } from './dtos';
 
 @Injectable()
 export class PopulateService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async populateUsers(users: User[]) {
+  async populateUsers(users: UserDto[]) {
     const methodPayment = this.databaseService.methodPayment;
     methodPayment.token = 'tok_test_37635_0A82b0a3536a4B9662c6F2392b5baBfA';
     methodPayment.expires_token = '2023-09-04T06:04:16.000Z';
@@ -28,5 +30,7 @@ export class PopulateService {
         this.databaseService.methodPaymentRepository.create(methodPayment);
       await this.databaseService.methodPaymentRepository.save(newMethodPayment);
     }
+
+    return { message: 'Users registration completed' };
   }
 }

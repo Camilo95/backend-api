@@ -8,7 +8,7 @@ import { DatabaseModule } from '@Database/database';
 
 // Dtos
 import { TravelDto } from './dtos/travel.dto';
-import { PaymentModule } from 'libs/payment/src';
+import { PaymentModule } from '@Payment/payment';
 
 describe('TravelController', () => {
   let controller: TravelController;

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 // Types
-import { TRANSACTIONS_STATUS } from 'libs/payment/src/types';
+import { TRANSACTIONS_STATUS } from '@Payment/payment/types';
 
 @Entity()
 export class TravelPayment {

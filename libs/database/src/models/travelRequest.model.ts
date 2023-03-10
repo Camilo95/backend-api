@@ -20,7 +20,7 @@ export class TravelRequest {
   id: string;
 
   @Column()
-  reference: number;
+  reference: string;
 
   @Column()
   starting_latitude: string;

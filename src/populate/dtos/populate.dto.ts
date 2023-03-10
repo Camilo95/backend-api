@@ -1,5 +1,16 @@
-import { User } from '@Database/database/models';
+import { IsString, IsEnum } from 'class-validator';
 
 export class UserDto {
-  data: User[];
+  @IsString()
+  firstName;
+
+  @IsString()
+  lastName;
+
+  @IsString()
+  email;
+
+  @IsString()
+  @IsEnum(['RIDER', 'DRIVER'])
+  type;
 }

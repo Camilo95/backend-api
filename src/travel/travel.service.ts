@@ -3,18 +3,19 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const moment = require('moment');
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Dtos
 import { TravelDto } from './dtos/travel.dto';
 
 // Modules
-import { PaymentService } from 'libs/payment/src';
+import { PaymentService } from '@Payment/payment';
 import {
   CURRENCY,
   PAYMENTS_METHOD,
   TTransaction,
-} from 'libs/payment/src/types';
+} from '@Payment/payment/types';
 
 @Injectable()
 export class TravelService {
@@ -95,7 +96,7 @@ export class TravelService {
       );
     }
 
-    await sleep(5000);
+    await sleep(10000);
 
     // Get transaction
     const idTransaction = transaction.data.id;
@@ -104,23 +105,30 @@ export class TravelService {
     );
 
     // Create payment
-    const travelPayment = this.databaseService.travelPayment;
+    let travelPayment = this.databaseService.travelPayment;
     travelPayment.status_transaction = responsetransaction.data.status;
     travelPayment.amount_payed = transaction.data.amount_in_cents;
 
     const newTravelPayment =
       this.databaseService.travelPaymentRepository.create(travelPayment);
-    this.databaseService.travelPaymentRepository.save(newTravelPayment);
+    travelPayment = await this.databaseService.travelPaymentRepository.save(
+      newTravelPayment,
+    );
 
     // Update travel
     travel.travelPayment = travelPayment;
     await this.databaseService.travelRequestRepository.save(travel);
 
-    return { message: 'the service is completed' };
+    return {
+      message: `the service is completed, total paid: ${travel.amount} COP`,
+    };
   }
 
   generateReference() {
-    return Math.floor(Math.random() * 100000);
+    const part1 = Math.floor(Math.random() * 100000);
+    const part2 = Math.floor(Math.random() * 100000);
+    const reference = `${part1}-${part2}`;
+    return reference;
   }
 
   async getTravelsOnProgress(id: string) {
@@ -144,15 +152,8 @@ export class TravelService {
     };
   }
 
-  /* private calcualteLongLat() {
-    return {
-      longitude: Math.floor(Math.random() * 100000).toString(),
-      latitude: Math.floor(Math.random() * 100000).toString(),
-    };
-  }*/
-
   private calculateLongitud(puntoA1, puntoA2, puntoB1, puntoB2) {
-    const km = 10000;
+    const km = 1000;
     const longitude = Math.sqrt(
       Math.pow(puntoA2 - puntoA1, 2) + Math.pow(puntoB2 - puntoB1, 2),
     );

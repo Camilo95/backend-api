@@ -23,7 +23,7 @@ describe('PopulateController', () => {
   });
 
   it('run import users', async () => {
-    await controller.handlerPopulateUsers(users as UserDto);
+    await controller.handlerPopulateUsers(users as UserDto[]);
     expect(controller).toBeDefined();
   });
 });

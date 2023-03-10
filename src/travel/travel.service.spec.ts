@@ -5,7 +5,7 @@ import { TravelService } from './travel.service';
 import { TravelModule } from './travel.module';
 import { UserModule } from '../user/user.module';
 import { DatabaseModule } from '@Database/database';
-import { PaymentModule } from 'libs/payment/src';
+import { PaymentModule } from '@Payment/payment';
 
 describe('TravelService', () => {
   let service: TravelService;

@@ -10,12 +10,7 @@ const api = nock('https://example.com', {
 
 describe('Request', () => {
   beforeEach(() => {
-    // api.activeMocks();
-    nock.activate();
-  });
-
-  afterEach(() => {
-    nock.cleanAll();
+    // nock.cleanAll();
   });
 
   it('should be defined', () => {
@@ -33,6 +28,7 @@ describe('Request', () => {
         node_id: 'MDc6TGljZW5zZTEz',
       },
     });
+    nock.activeMocks();
 
     const url = 'https://example.com/repos/atom/atom/license';
     const options: RequestInit = {
