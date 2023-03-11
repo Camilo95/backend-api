@@ -32,42 +32,42 @@
 $ npm install
 ```
 
-## Running the app
-
+## Enviroments of application
 ```bash
-# development
-$ npm run start
+export PAYMENT_PUBLIC_KEY=pub_test_.................
+export PAYMENT_PRIVATE_KEY=prv_test_.................
+export PAYMENT_INTEGRITY_SECRET=test_integrity_.................
+export PAYMENT_URL=https://sandbox.wompi.co/v1
+export MODE_DEV=true
+export DB_HOST=localhost #only for testing locally, not use in docker
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Running the app on docker
+
+```bash
+# run docker
+$ docker-compose build
+
+# start docker
+$ docker-compose up
+```
+
+## Test of application
+```bash
+# populate users
+$ npm run populate
+
+# run test app
+$ npm run testApp
+```
+
+## Test of code
 
 ```bash
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
