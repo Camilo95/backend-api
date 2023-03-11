@@ -3,7 +3,7 @@ import { DialectsDB, TConfigDto } from '../types';
 /* A configuration file for the database. */
 const config: TConfigDto = {
   DB_DIALECT: (process.env.DB_DIALECT as DialectsDB) || 'postgres',
-  DB_HOST: process.env.DB_HOST || 'localhost',
+  DB_HOST: process.env.DB_HOST || 'postgres_db',
   DB_PORT: parseInt(process.env.DB_PORT, 10) || 5432,
   DB_DATABASE: process.env.DB_DATABASE || 'platform',
   DB_USER: process.env.DB_USER || 'root',

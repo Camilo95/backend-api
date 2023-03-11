@@ -35,9 +35,7 @@ export class Payment {
   }
 
   private getBaseUrl() {
-    return config.MODE_DEV
-      ? config.PAYMENT_URL_SANDBOX
-      : config.PAYMENT_URL_PRODUCTION;
+    return config.PAYMENT_URL;
   }
 
   async getMerchant() {
