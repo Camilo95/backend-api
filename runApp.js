@@ -59,9 +59,4 @@ const finishService = async (id) => {
     const message = await finishService(id);
     console.log(`${message}\n`);
   }
-  /*for (let i = 0; i < 30; i++) {
-    const id = await createService();
-    const message = await finishService(id);
-    console.log(message);
-  }*/
 })();
